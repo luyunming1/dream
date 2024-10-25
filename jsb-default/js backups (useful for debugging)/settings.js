@@ -1,0 +1,1 @@
+window._CCSettings={platform:"ios",groupList:["default"],collisionMatrix:[[true]],hasResourcesBundle:true,hasStartSceneBundle:false,remoteBundles:[],subpackages:[],launchScene:"db://assets/FirstGo/Launch_BC.fire",orientation:"",server:"",jsList:[]};
