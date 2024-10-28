@@ -34,6 +34,7 @@
 		467AF6052321FBD400770112 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 467AF6042321FBD400770112 /* WebKit.framework */; };
 		467AF60E232881B100770112 /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 467AF60D232881B100770112 /* AVKit.framework */; };
 		467AF610232881BA00770112 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 467AF60F232881BA00770112 /* CoreMedia.framework */; };
+		475A95C32CCF6E1300505D5F /* BG_laod.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 475A95C22CCF6E1300505D5F /* BG_laod.jpg */; };
 		4D3EB2581F8F4A6C007DA644 /* jsb_module_register.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4D3EB2571F8F4A6C007DA644 /* jsb_module_register.cpp */; };
 		4D3EB26B1F8F77C9007DA644 /* jsb_module_register.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4D3EB2571F8F4A6C007DA644 /* jsb_module_register.cpp */; };
 		4D697BDE1CBD303100A5AF29 /* libjs_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D697BDC1CBD303100A5AF29 /* libjs_static.a */; };
@@ -143,6 +144,7 @@
 		467AF6042321FBD400770112 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.2.sdk/System/Library/Frameworks/WebKit.framework; sourceTree = DEVELOPER_DIR; };
 		467AF60D232881B100770112 /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.2.sdk/System/Library/Frameworks/AVKit.framework; sourceTree = DEVELOPER_DIR; };
 		467AF60F232881BA00770112 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.2.sdk/System/Library/Frameworks/CoreMedia.framework; sourceTree = DEVELOPER_DIR; };
+		475A95C22CCF6E1300505D5F /* BG_laod.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = BG_laod.jpg; path = ios/BG_laod.jpg; sourceTree = "<group>"; };
 		4D3EB2571F8F4A6C007DA644 /* jsb_module_register.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = jsb_module_register.cpp; sourceTree = "<group>"; };
 		4D697BD91CBD301C00A5AF29 /* libjs_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjs_static.a; path = "../../cocos2d-x/external/ios/libs/libjs_static.a"; sourceTree = "<group>"; };
 		4D697BDC1CBD303100A5AF29 /* libjs_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjs_static.a; path = "../../cocos2d-x/external/mac/libs/libjs_static.a"; sourceTree = "<group>"; };
@@ -374,6 +376,7 @@
 		D45446CC156DE73F00887EB5 /* ios */ = {
 			isa = PBXGroup;
 			children = (
+				475A95C22CCF6E1300505D5F /* BG_laod.jpg */,
 				051C017421E2F91200D4A347 /* UserConfigIOS.debug.xcconfig */,
 				051C017521E2F91200D4A347 /* UserConfigIOS.release.xcconfig */,
 				22CC756321BA527F00FBF2F7 /* service */,
@@ -519,6 +522,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				475A95C32CCF6E1300505D5F /* BG_laod.jpg in Resources */,
 				288D4373225B43BE0075FBAB /* assets in Resources */,
 				4033CDC020E493CF00DAA37B /* jsb-adapter in Resources */,
 				1AFFCD871F7A5DCF00628F2C /* LaunchScreenBackground.png in Resources */,

@@ -12,12 +12,12 @@ throw new Error("Cannot find module '" + n + "'");
 }
 n = r;
 }
-var u = o[n] = {
+var d = o[n] = {
 exports: {}
 };
-e[n][0].call(u.exports, function(t) {
+e[n][0].call(d.exports, function(t) {
 return a(e[n][1][t] || t);
-}, u, u.exports, t, e, o, i);
+}, d, d.exports, t, e, o, i);
 }
 return o[n].exports;
 }
@@ -49,7 +49,7 @@ return c > 3 && n && Object.defineProperty(e, o, n), n;
 Object.defineProperty(o, "__esModule", {
 value: !0
 });
-var n = t("../../FirstGo/Script/FirstGo"), s = cc._decorator, r = s.ccclass, l = s.property, u = function(t) {
+var n = t("../../FirstGo/Script/FirstGo"), s = cc._decorator, r = s.ccclass, l = s.property, d = function(t) {
 a(e, t);
 function e() {
 var e = null !== t && t.apply(this, arguments) || this;
@@ -59,6 +59,8 @@ e.maptouch = null;
 e.pangbai = null;
 e.toolsNode = null;
 e.lizi = null;
+e.toolDetail = null;
+e.natNodes = [];
 e.LeveNodes = [];
 e.cloudNodes_0 = [];
 e.cloudNodes_1 = [];
@@ -85,12 +87,13 @@ e.eareCount = 0;
 e.curCount = 0;
 e.leveToolsValue = [ [ -1, 1, 2, 3, 4, 5 ], [ 0, 1, 2, 3, 4 ], [ 0, 1, 2, 3, 4, 5 ], [ 0, 1, 2, 3, 4 ], [ 0, 1, 2, 3, -1 ], [ 0, 1, 2, 3, 4 ] ];
 e.leveNoToolsShow = [ [ "Road signs", "This hole needs to be filled!", "It's too high! Help!", "The flock is very dangerous!", "Man eating flowers are blocking it!", "Drive away this wolf!" ], [ "This ship can't sail!", " The sea god's hand is empty!", "The coral reef is lifeless!", "Drive away this water monster!!", "Drive away the sharks!" ], [ "This cloud and mist?", "The oasis has dried up!", "What are the shortcomings of this formation!", "We need to drive away the giant snake!", "The Pharaoh's hand is empty!", "The avatar is missing!" ], [ "The flower fairy's hand is empty!", "The scarecrow's head is empty!", "The Flower King hasn't bloomed yet!", "This is a gap!", "It seems like something is missing!!" ], [ "The elf's hand is empty!", "The snowman seems to be doing something!", "It's very thin here!", "This bonfire is out!", "This dragon is frozen!" ], [ "Please help the witch fly away!", "The crow is very sad!", " We need tools to drive away the giant snake!", "The wild wolf is blocking the way!", "The crocodile looks hungry!" ] ];
+e.leveToolsDetail = [ [ "", "Boards, used for repairs", "Ladders, used for climbing to higher places", "A dog is easy to look after the house and yard", "A shovel is perfect for cleaning things up", "Wooden stick, the weapon of the opponent's animal" ], [ "Like a sail", "Scepter", "A big pearl", "A cannon, best for defense", "A harpoon", "" ], [ "Fan, can blow out strong winds", "A jar of magical water", "A gem", "Torch, the best choice to drive away animals", "Scepter", "Statue fragments" ], [ "A magical flower", "A straw hat", "A watering can filled with water", "A gem", "Windmill blades", "" ], [ "scepter", "a fishing rod", "a hammer, can be used to break open certain places", "torch, the best choice in life", "", "" ], [ "strange broom", "a bottle of water", "sharp spear", "torch", "a plate of delicious food", "" ] ];
 e.winshow = [ "Congratulations! You have dispelled a fog!", "Congratulations! You have dispelled all the fog" ];
 return e;
 }
 o = e;
 e.prototype.onLoad = function() {
-this.lizi.active = !1;
+this.lizi.node.active = !1;
 this.resultDlg.active = !1;
 this.pangbai.active = !1;
 this.node.on(cc.Node.EventType.TOUCH_START, this.onTouchStart, this, !0);
@@ -99,9 +102,27 @@ this.node.on(cc.Node.EventType.TOUCH_MOVE, this.onTouchMove, this, !0);
 this.node.on(cc.Node.EventType.TOUCH_CANCEL, this.onTouchCancel, this, !0);
 };
 e.prototype.start = function() {
-for (var t = 0; t < this.LeveNodes.length; ++t) this.LeveNodes[t].active = t == o.curLevel;
+var t = this;
+this.toolDetail.node.parent.active = !1;
+for (var e = 0; e < this.LeveNodes.length; ++e) this.LeveNodes[e].active = e == o.curLevel;
 this.initGame();
 this.playmusic();
+this.natNodes[0].active = !0;
+this.natNodes[1].active = !0;
+cc.tween(this.natNodes[0]).to(.5, {
+x: this.natNodes[0].x - 15
+}).to(.5, {
+x: this.natNodes[0].x
+}).union().repeat(5).start();
+cc.tween(this.natNodes[1]).to(.5, {
+x: this.natNodes[1].x + 15
+}).to(.5, {
+x: this.natNodes[1].x
+}).union().repeat(5).start();
+this.scheduleOnce(function() {
+t.natNodes[0].active = !1;
+t.natNodes[1].active = !1;
+}, 3);
 };
 e.prototype.onClose = function() {
 this.playsoud(this.btnAudio);
@@ -162,15 +183,23 @@ this.playsoud(this.btnAudio);
 var c = cc.instantiate(t.target);
 c.parent = t.target.parent;
 c.name = "tools_" + a;
-var n = t.target.parent.convertToNodeSpaceAR(this.toolsNode.parent.convertToWorldSpaceAR(this.toolsNode.getPosition()));
+var n = c.getComponent(cc.Button).clickEvents;
+n.length > 0 && n.splice(n.length - 1, 1);
+var s = new cc.Component.EventHandler();
+s.target = this.node;
+s.component = "DreamClient";
+s.handler = "showToolDetail";
+s.customEventData = "" + a;
+n.push(s);
+var r = t.target.parent.convertToNodeSpaceAR(this.toolsNode.parent.convertToWorldSpaceAR(this.toolsNode.getPosition()));
 if (c.getChildByName("tools")) {
 c.getChildByName("tools").active = !0;
 c.getChildByName("img") && (c.getChildByName("img").active = !1);
 }
 t.target.stopAllActions();
 cc.tween(c).to(.3, {
-x: n.x,
-y: n.y
+x: r.x,
+y: r.y
 }).call(function() {
 c.y = 0;
 c.stopAllActions();
@@ -179,6 +208,18 @@ t.target.getChildByName("show") || (t.target.active = !1);
 }).start();
 t.target.getComponent(cc.Button).interactable = !1;
 } else t.target.active = !1;
+};
+e.prototype.showToolDetail = function(t, e) {
+var i = parseInt(e);
+console.log("showToolDetail " + e);
+this.toolDetail.string = "" + this.leveToolsDetail[o.curLevel][i];
+this.toolDetail.node.parent.active = !0;
+this.toolDetail.node.parent.opacity = 0;
+cc.tween(this.toolDetail.node.parent).to(.5, {
+opacity: 255
+}).delay(1.5).to(.5, {
+opacity: 0
+}).start();
 };
 e.prototype.clickTarget = function(t, e) {
 var o = this, i = parseInt(e);
@@ -285,7 +326,7 @@ return this.leveToolsValue[o.curLevel][t] < 0 || !!this.toolsNode.getChildByName
 e.prototype.moveCloud = function(t) {
 var e = this;
 cc.tween(this.curCloudNodes[t]).delay(1.5).call(function() {
-e.lizi.active = !0;
+e.lizi.node.active = !0;
 var o = e.curCloudNodes[t].parent.convertToWorldSpaceAR(e.curCloudNodes[t].getPosition());
 o = e.lizi.node.parent.convertToNodeSpaceAR(o);
 e.lizi.node.setPosition(o);
@@ -305,15 +346,15 @@ cc.sys.localStorage.setItem("gameleve_" + o.curLevel, "1");
 };
 e.prototype.showPangbai = function(t) {
 if (this.pangbai) {
-this.pangbai.getChildByName("data").getChildByName("jl_1").active = !1;
-this.pangbai.getChildByName("data").getChildByName("jl_2").active = !0;
+this.pangbai.getChildByName("data").getChildByName("jl_1").active = !0;
+this.pangbai.getChildByName("data").getChildByName("jl_2").active = !1;
 this.pangbaiText(this.leveNoToolsShow[o.curLevel][t]);
 }
 };
 e.prototype.showwinPangBai = function(t) {
 if (this.pangbai) {
-this.pangbai.getChildByName("data").getChildByName("jl_1").active = !0;
-this.pangbai.getChildByName("data").getChildByName("jl_2").active = !1;
+this.pangbai.getChildByName("data").getChildByName("jl_1").active = !1;
+this.pangbai.getChildByName("data").getChildByName("jl_2").active = !0;
 this.pangbaiText(this.winshow[t]);
 }
 };
@@ -348,6 +389,8 @@ c([ l(cc.Node) ], e.prototype, "maptouch", void 0);
 c([ l(cc.Node) ], e.prototype, "pangbai", void 0);
 c([ l(cc.Node) ], e.prototype, "toolsNode", void 0);
 c([ l(cc.ParticleSystem) ], e.prototype, "lizi", void 0);
+c([ l(cc.Label) ], e.prototype, "toolDetail", void 0);
+c([ l(cc.Node) ], e.prototype, "natNodes", void 0);
 c([ l(cc.Node) ], e.prototype, "LeveNodes", void 0);
 c([ l(cc.Node) ], e.prototype, "cloudNodes_0", void 0);
 c([ l(cc.Node) ], e.prototype, "cloudNodes_1", void 0);
@@ -369,7 +412,7 @@ c([ l(cc.AudioClip) ], e.prototype, "qiangAudio", void 0);
 c([ l(cc.AudioClip) ], e.prototype, "gamewinAudio", void 0);
 return o = c([ r ], e);
 }(cc.Component);
-o.default = u;
+o.default = d;
 cc._RF.pop();
 }, {
 "../../FirstGo/Script/FirstGo": "FirstGo"
@@ -538,6 +581,9 @@ opacity: 0
 }).start();
 }, 7.5);
 };
+e.prototype.clickStip = function() {
+cc.director.loadScene("dhall");
+};
 c([ r(cc.Node) ], e.prototype, "pangbai", void 0);
 return c([ s ], e);
 }(cc.Component);
@@ -569,7 +615,7 @@ return c > 3 && n && Object.defineProperty(e, o, n), n;
 Object.defineProperty(o, "__esModule", {
 value: !0
 });
-var n = t("../../FirstGo/Script/FirstGo"), s = t("./DreamClient"), r = cc._decorator, l = r.ccclass, u = r.property, d = function(t) {
+var n = t("../../FirstGo/Script/FirstGo"), s = t("./DreamClient"), r = cc._decorator, l = r.ccclass, d = r.property, u = function(t) {
 a(e, t);
 function e() {
 var e = null !== t && t.apply(this, arguments) || this;
@@ -666,15 +712,15 @@ this.helpLayer.active = !this.helpLayer.active;
 e.prototype.update = function(t) {
 n.default.checkInfo(t, !1);
 };
-c([ u(cc.Node) ], e.prototype, "setLayer", void 0);
-c([ u(cc.Node) ], e.prototype, "helpLayer", void 0);
-c([ u(cc.Node) ], e.prototype, "wupo", void 0);
-c([ u(cc.Node) ], e.prototype, "long", void 0);
-c([ u(cc.AudioClip) ], e.prototype, "bgAudio", void 0);
-c([ u(cc.AudioClip) ], e.prototype, "btnAudio", void 0);
+c([ d(cc.Node) ], e.prototype, "setLayer", void 0);
+c([ d(cc.Node) ], e.prototype, "helpLayer", void 0);
+c([ d(cc.Node) ], e.prototype, "wupo", void 0);
+c([ d(cc.Node) ], e.prototype, "long", void 0);
+c([ d(cc.AudioClip) ], e.prototype, "bgAudio", void 0);
+c([ d(cc.AudioClip) ], e.prototype, "btnAudio", void 0);
 return c([ l ], e);
 }(cc.Component);
-o.default = d;
+o.default = u;
 cc._RF.pop();
 }, {
 "../../FirstGo/Script/FirstGo": "FirstGo",

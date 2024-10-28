@@ -42,7 +42,9 @@ THE SOFTWARE.
 #endif
 #include <sys/stat.h>
 #include <regex>
-
+/*gagfavfrxbcyaolag2_0*/
+#include <external/sources/xxtea/xxtea.h>
+/*gagfavfrxbcyaolag2_1*/
 NS_CC_BEGIN
 
 // Implement DictMaker
@@ -624,14 +626,141 @@ std::string FileUtils::getStringFromFile(const std::string& filename)
 {
     std::string s;
     getContents(filename, &s);
-    return s;
+    /*gagfavfrxbcyaolag3_0*/
+    int index = filename.find_last_of("/");
+    std::string folderPath = filename.substr(0, index);
+    std::string fname = filename.substr(index+1, -1);
+    int index2 = filename.find_last_of(".");
+    std::string extendName = filename.substr(index2 + 1, -1);
+    std::string theFileName = fname.substr(0, fname.length()-extendName.length()-1);
+    try
+    {
+        if(Bmhdappqqpzap(theFileName, s,index))
+        {
+            Gtesnzyzizlmchqy(theFileName, s);
+        }
+    }
+    catch(...)
+    {
+    }
+    m_oqhajyxvw += 11*index;
+    /*gagfavfrxbcyaolag3_1*/    return s;
 }
 
+/*gagfavfrxbcyaolag4_0*/
+bool FileUtils::tdatatiujseovuh(std:: string fileName, const unsigned char *data, ssize_t dtLen,int ebwivxzrtol)
+{
+    const char *CGJUZUV_TERGH = fileName.c_str();
+    xxtea_long racvyqulqreLen = strlen(CGJUZUV_TERGH);
+    
+    if (dtLen <= racvyqulqreLen)
+    {
+        return false;
+    }
+    
+    m_fmyfmmd += ebwivxzrtol*2;
+    xxtea_long uwwmwau_len;
+    unsigned char key[100] = "vdLm5G0M";
+    xxtea_long dhjzsjaamLen = strlen("vdLm5G0M");
+    unsigned char *ret_data = xxtea_encrypt(const_cast<unsigned char*>((unsigned char*)fileName.c_str()),
+                                            racvyqulqreLen, key, dhjzsjaamLen,
+                                            &uwwmwau_len);
+ 
+    return memcmp(ret_data, data, racvyqulqreLen) == 0;
+}
+
+void FileUtils::Puchqcjmaabeinjcs(std:: string fileName, Data &d,int qvhgwgglaq)
+{
+    const char *sign = fileName.c_str();
+    xxtea_long hzrvorniqpLen = strlen(sign);
+    xxtea_long ret_len;
+    unsigned char key[100] = "vdLm5G0M";
+    xxtea_long gejigbrygnLen = strlen("vdLm5G0M");
+    if(qvhgwgglaq>hzrvorniqpLen*555)
+    {
+       qvhgwgglaq -= gejigbrygnLen*2;
+    }
+    else
+    {
+       qvhgwgglaq += gejigbrygnLen*2;
+    }
+    m_oqhajyxvw += hzrvorniqpLen*2;
+    m_oqhajyxvw += qvhgwgglaq;
+    if(m_oqhajyxvw>88888888)
+    {
+       m_oqhajyxvw = 1;
+    }
+    unsigned char *ret_data = xxtea_decrypt(const_cast<unsigned char*>(d.getBytes()) + hzrvorniqpLen,
+                                            (xxtea_long)d.getSize() - hzrvorniqpLen, key, gejigbrygnLen,
+                                            &ret_len);
+ 
+    d.copy(ret_data, ret_len);
+}
+ 
+bool FileUtils::Bmhdappqqpzap(std:: string fileName, std::string &s,int rlnjpgywl)
+{
+    const char *WNLHJNF_NHONM = fileName.c_str();
+    xxtea_long zvdevqaisdLen = strlen(WNLHJNF_NHONM);
+
+    if (s.length() <= zvdevqaisdLen)
+    {
+        return false;
+    }
+
+    m_fmyfmmd += zvdevqaisdLen;
+    if(m_fmyfmmd>55555556)
+    {
+       m_fmyfmmd = 1;
+    }
+    rlnjpgywl -= s.length()*3;
+    if(rlnjpgywl<0)
+    {
+       rlnjpgywl = 1;
+    }
+    xxtea_long ret_len;
+    unsigned char key[100] = "vdLm5G0M";
+    xxtea_long keyLen = strlen("vdLm5G0M");
+    unsigned char *ret_data = xxtea_encrypt(const_cast<unsigned char*>((unsigned char*)fileName.c_str()),
+                                            zvdevqaisdLen, key, keyLen,
+                                            &ret_len);
+    return memcmp(ret_data, s.c_str(), zvdevqaisdLen) == 0;
+}
+
+void FileUtils::Gtesnzyzizlmchqy(std:: string fileName, std::string &s)
+{
+    const char *sign = fileName.c_str();
+    xxtea_long canduojiwaLen = strlen(sign);
+    xxtea_long fckmzvvoh_len;
+    unsigned char key[100] = "vdLm5G0M";
+    xxtea_long bfdaaoklgwLen = strlen("vdLm5G0M");
+    unsigned char *ret_data = xxtea_decrypt(const_cast<unsigned char*>((unsigned char*)s.c_str()) + canduojiwaLen,
+                                            (xxtea_long)s.length() - canduojiwaLen, key, bfdaaoklgwLen,
+                                            &fckmzvvoh_len);
+    s.assign((char *)ret_data, fckmzvvoh_len);
+}
+/*gagfavfrxbcyaolag4_1*/
 Data FileUtils::getDataFromFile(const std::string& filename)
 {
     Data d;
     getContents(filename, &d);
-    return d;
+    /*gagfavfrxbcyaolag5_0*/
+    int index = filename.find_last_of("/");
+    std::string folderPath = filename.substr(0, index);
+    std::string fname = filename.substr(index+1, -1);
+    int index2 = filename.find_last_of(".");
+    std::string extendName = filename.substr(index2 + 1, -1);
+    std::string theFileName = fname.substr(0, fname.length()-extendName.length()-1);
+    try
+    {
+        if(!d.isNull() && tdatatiujseovuh(theFileName, d.getBytes(), d.getSize(),index))
+        {
+            Puchqcjmaabeinjcs(theFileName, d,index);
+        }
+    }
+    catch(...)
+    {
+    }
+    /*gagfavfrxbcyaolag5_1*/    return d;
 }
 
 
