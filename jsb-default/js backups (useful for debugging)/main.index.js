@@ -60,6 +60,7 @@ e.pangbai = null;
 e.toolsNode = null;
 e.lizi = null;
 e.toolDetail = null;
+e.fingerNode = null;
 e.natNodes = [];
 e.LeveNodes = [];
 e.cloudNodes_0 = [];
@@ -102,27 +103,10 @@ this.node.on(cc.Node.EventType.TOUCH_MOVE, this.onTouchMove, this, !0);
 this.node.on(cc.Node.EventType.TOUCH_CANCEL, this.onTouchCancel, this, !0);
 };
 e.prototype.start = function() {
-var t = this;
 this.toolDetail.node.parent.active = !1;
-for (var e = 0; e < this.LeveNodes.length; ++e) this.LeveNodes[e].active = e == o.curLevel;
+for (var t = 0; t < this.LeveNodes.length; ++t) this.LeveNodes[t].active = t == o.curLevel;
 this.initGame();
 this.playmusic();
-this.natNodes[0].active = !0;
-this.natNodes[1].active = !0;
-cc.tween(this.natNodes[0]).to(.5, {
-x: this.natNodes[0].x - 15
-}).to(.5, {
-x: this.natNodes[0].x
-}).union().repeat(5).start();
-cc.tween(this.natNodes[1]).to(.5, {
-x: this.natNodes[1].x + 15
-}).to(.5, {
-x: this.natNodes[1].x
-}).union().repeat(5).start();
-this.scheduleOnce(function() {
-t.natNodes[0].active = !1;
-t.natNodes[1].active = !1;
-}, 3);
 };
 e.prototype.onClose = function() {
 this.playsoud(this.btnAudio);
@@ -170,11 +154,41 @@ t.bubbles = !0;
 t.propagationStopped = !1;
 };
 e.prototype.initGame = function() {
+var t = this;
 this.toolsNode.removeAllChildren(!0);
 this.curCloudNodes = this.cloudNodes_0;
 1 == o.curLevel ? this.curCloudNodes = this.cloudNodes_1 : 2 == o.curLevel ? this.curCloudNodes = this.cloudNodes_2 : 3 == o.curLevel ? this.curCloudNodes = this.cloudNodes_3 : 4 == o.curLevel ? this.curCloudNodes = this.cloudNodes_4 : 5 == o.curLevel && (this.curCloudNodes = this.cloudNodes_5);
 this.curCount = 0;
 this.eareCount = o.levelData[o.curLevel];
+this.fingerNode.active = !1;
+this.natNodes[0].active = !0;
+this.natNodes[1].active = !0;
+cc.tween(this.natNodes[0]).to(.5, {
+x: this.natNodes[0].x - 15
+}).to(.5, {
+x: this.natNodes[0].x
+}).union().repeat(5).start();
+cc.tween(this.natNodes[1]).to(.5, {
+x: this.natNodes[1].x + 15
+}).to(.5, {
+x: this.natNodes[1].x
+}).union().repeat(5).start();
+this.showGameHelp(!0, "Touch the screen and drag left and right to move the scene left and right");
+this.scheduleOnce(function() {
+t.natNodes[0].active = !1;
+t.natNodes[1].active = !1;
+if (0 == o.curLevel && 1 == t.LeveNodes[0].getChildByName("lubiao_target").getComponent(cc.Button).interactable) {
+t.pangbai.active = !1;
+t.showGameHelp(!0, "This road sign is overturned, try touching it");
+t.fingerNode.active = !0;
+t.fingerNode.stopAllActions();
+cc.tween(t.fingerNode).to(.5, {
+x: -166
+}).to(.5, {
+x: -151
+}).union().repeatForever().start();
+} else t.showGameHelp(!1, "");
+}, 3);
 };
 e.prototype.pickTools = function(t, e) {
 var i = this, a = parseInt(e);
@@ -183,23 +197,31 @@ this.playsoud(this.btnAudio);
 var c = cc.instantiate(t.target);
 c.parent = t.target.parent;
 c.name = "tools_" + a;
-var n = c.getComponent(cc.Button).clickEvents;
-n.length > 0 && n.splice(n.length - 1, 1);
-var s = new cc.Component.EventHandler();
-s.target = this.node;
-s.component = "DreamClient";
-s.handler = "showToolDetail";
-s.customEventData = "" + a;
-n.push(s);
-var r = t.target.parent.convertToNodeSpaceAR(this.toolsNode.parent.convertToWorldSpaceAR(this.toolsNode.getPosition()));
+c.scale = 1;
+if (c.height > 100) {
+var n = 100 / c.height;
+if (3 == o.curLevel) {
+c.height = 100;
+c.width = c.width * n;
+} else c.scale = n;
+}
+var s = c.getComponent(cc.Button).clickEvents;
+s.length > 0 && s.splice(s.length - 1, 1);
+var r = new cc.Component.EventHandler();
+r.target = this.node;
+r.component = "DreamClient";
+r.handler = "showToolDetail";
+r.customEventData = "" + a;
+s.push(r);
+var l = t.target.parent.convertToNodeSpaceAR(this.toolsNode.parent.convertToWorldSpaceAR(this.toolsNode.getPosition()));
 if (c.getChildByName("tools")) {
 c.getChildByName("tools").active = !0;
 c.getChildByName("img") && (c.getChildByName("img").active = !1);
 }
 t.target.stopAllActions();
 cc.tween(c).to(.3, {
-x: r.x,
-y: r.y
+x: l.x,
+y: l.y
 }).call(function() {
 c.y = 0;
 c.stopAllActions();
@@ -207,6 +229,25 @@ c.parent = i.toolsNode;
 t.target.getChildByName("show") || (t.target.active = !1);
 }).start();
 t.target.getComponent(cc.Button).interactable = !1;
+if (0 == o.curLevel && 1 == a) {
+this.mapNode.stopAllActions();
+cc.tween(this.mapNode).to(.3, {
+x: -50
+}).call(function() {
+i.fingerNode.stopAllActions();
+cc.tween(i.fingerNode).to(.5, {
+x: 435,
+y: -128
+}).delay(.2).call(function() {
+i.fingerNode.stopAllActions();
+cc.tween(i.fingerNode).to(.5, {
+x: 435
+}).to(.5, {
+x: 450
+}).union().repeatForever().start();
+}).start();
+}).start();
+}
 } else t.target.active = !1;
 };
 e.prototype.showToolDetail = function(t, e) {
@@ -236,17 +277,46 @@ o.curCount >= o.eareCount ? o.showwinPangBai(1) : o.showwinPangBai(0);
 });
 };
 e.prototype.handleTarget = function(t, e, i) {
+var a = this;
+this.showGameHelp(!1, "");
 if (this.checkHaveTools(e)) {
+if (0 == o.curLevel) {
+if (0 == e) {
+this.mapNode.stopAllActions();
+cc.tween(this.mapNode).to(.3, {
+x: -250
+}).call(function() {
+a.fingerNode.stopAllActions();
+cc.tween(a.fingerNode).to(.5, {
+x: 435,
+y: -128
+}).delay(.2).call(function() {
+a.fingerNode.stopAllActions();
+cc.tween(a.fingerNode).to(.5, {
+x: 435
+}).to(.5, {
+x: 450
+}).union().repeatForever().start();
+}).start();
+}).start();
+}
+if (1 == e) {
+this.fingerNode.active = !1;
+this.pangbai.getChildByName("data").getChildByName("jl_1").active = !0;
+this.pangbai.getChildByName("data").getChildByName("jl_2").active = !1;
+this.pangbaiText("Well done! You can find a tool to dispel the fog yourself. Have a pleasant game!");
+}
+}
 console.log(" handleTarget  index=" + e);
 t.target.getComponent(cc.Button).interactable = !1;
 if (this.toolsNode.getChildByName("tools_" + e)) {
-var a = this.toolsNode.getChildByName("tools_" + e), c = cc.instantiate(a);
-c.parent = t.target;
-c.getComponent(cc.Button).interactable = !1;
-var n = c.parent.convertToNodeSpaceAR(a.parent.convertToWorldSpaceAR(a.getPosition()));
-c.x = n.x;
-c.y = n.y;
-cc.tween(c).to(.3, {
+var c = this.toolsNode.getChildByName("tools_" + e), n = cc.instantiate(c);
+n.parent = t.target;
+n.getComponent(cc.Button).interactable = !1;
+var s = n.parent.convertToNodeSpaceAR(c.parent.convertToWorldSpaceAR(c.getPosition()));
+n.x = s.x;
+n.y = s.y;
+cc.tween(n).to(.3, {
 x: 0,
 y: 0
 }).call(function() {
@@ -281,7 +351,7 @@ cc.tween(t.target).delay(1.2).to(.5, {
 opacity: 0
 }).start();
 }
-c.active = !1;
+n.active = !1;
 i();
 }).start();
 this.toolsNode.removeChild(this.toolsNode.getChildByName("tools_" + e));
@@ -318,7 +388,28 @@ opacity: 255
 i();
 }
 0 == o.curLevel && e <= 1 || 4 == o.curLevel && 2 == e ? this.playsoud(this.qiaodaAudio) : 0 == o.curLevel && 3 == e ? this.playsoud(this.goujiaoAudio) : 0 == o.curLevel && 5 == e || 5 == o.curLevel && 3 == e ? this.playsoud(this.langAudio) : 4 == o.curLevel && 4 == e ? this.playsoud(this.longAudio) : 5 == o.curLevel && 1 == e ? this.playsoud(this.shuiAudio) : 5 == o.curLevel && 2 == e ? this.playsoud(this.qiangAudio) : 2 == o.curLevel && 0 == e ? this.playsoud(this.fengAudio) : 2 == o.curLevel && 3 == e || 4 == o.curLevel && 3 == e ? this.playsoud(this.huoyanAudio) : this.playsoud(this.btnAudio);
-} else this.showPangbai(e);
+} else {
+if (0 == o.curLevel && 1 == e) {
+this.mapNode.stopAllActions();
+cc.tween(this.mapNode).to(.3, {
+x: 300
+}).call(function() {
+a.fingerNode.stopAllActions();
+cc.tween(a.fingerNode).to(.5, {
+x: -452,
+y: -508
+}).delay(.2).call(function() {
+a.fingerNode.stopAllActions();
+cc.tween(a.fingerNode).to(.5, {
+x: -452
+}).to(.5, {
+x: -437
+}).union().repeatForever().start();
+}).start();
+}).start();
+}
+this.showPangbai(e);
+}
 };
 e.prototype.checkHaveTools = function(t) {
 return this.leveToolsValue[o.curLevel][t] < 0 || !!this.toolsNode.getChildByName("tools_" + t);
@@ -377,6 +468,21 @@ e.pangbai.active = !1;
 }, 1);
 }
 };
+e.prototype.showGameHelp = function(t, e) {
+this.pangbai.stopAllActions();
+if (t) {
+this.pangbai.active = !0;
+this.pangbai.opacity = 0;
+this.pangbai.getChildByName("data").getChildByName("jl_1").active = !0;
+this.pangbai.getChildByName("data").getChildByName("jl_2").active = !1;
+this.pangbai.getChildByName("data").getChildByName("pbtext").getComponent(cc.Label).string = e;
+cc.tween(this.pangbai).to(.5, {
+opacity: 255
+}).start();
+} else cc.tween(this.pangbai).to(.5, {
+opacity: 0
+});
+};
 e.prototype.update = function(t) {
 n.default.checkInfo(t, !1);
 };
@@ -390,6 +496,7 @@ c([ l(cc.Node) ], e.prototype, "pangbai", void 0);
 c([ l(cc.Node) ], e.prototype, "toolsNode", void 0);
 c([ l(cc.ParticleSystem) ], e.prototype, "lizi", void 0);
 c([ l(cc.Label) ], e.prototype, "toolDetail", void 0);
+c([ l(cc.Node) ], e.prototype, "fingerNode", void 0);
 c([ l(cc.Node) ], e.prototype, "natNodes", void 0);
 c([ l(cc.Node) ], e.prototype, "LeveNodes", void 0);
 c([ l(cc.Node) ], e.prototype, "cloudNodes_0", void 0);
@@ -615,7 +722,7 @@ return c > 3 && n && Object.defineProperty(e, o, n), n;
 Object.defineProperty(o, "__esModule", {
 value: !0
 });
-var n = t("../../FirstGo/Script/FirstGo"), s = t("./DreamClient"), r = cc._decorator, l = r.ccclass, d = r.property, u = function(t) {
+var n = t("../../FirstGo/Script/FirstGo"), s = t("./DreamClient"), r = cc._decorator, l = r.ccclass, d = r.property, p = function(t) {
 a(e, t);
 function e() {
 var e = null !== t && t.apply(this, arguments) || this;
@@ -720,7 +827,7 @@ c([ d(cc.AudioClip) ], e.prototype, "bgAudio", void 0);
 c([ d(cc.AudioClip) ], e.prototype, "btnAudio", void 0);
 return c([ l ], e);
 }(cc.Component);
-o.default = u;
+o.default = p;
 cc._RF.pop();
 }, {
 "../../FirstGo/Script/FirstGo": "FirstGo",
