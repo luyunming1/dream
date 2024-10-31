@@ -448,6 +448,15 @@ var e = 0;
 cc.sys.localStorage.getItem("gameclear_" + o.curLevel) && (e = parseInt(cc.sys.localStorage.getItem("gameclear_" + o.curLevel)));
 e < this.curClear && (e = this.curClear);
 cc.sys.localStorage.setItem("gameclear_" + o.curLevel, "" + e);
+var i = 0;
+this.curClear >= 96 ? i = 5 : this.curClear >= 85 ? i = 4 : this.curClear >= 70 ? i = 3 : this.curClear >= 60 ? i = 2 : this.curClear >= 50 && (i = 1);
+for (var a = 0; a < 5; ++a) if (a < i) {
+var c = cc.Material.getBuiltinMaterial("2d-sprite");
+this.resultDlg.getChildByName("xx_" + a).getComponent(cc.Sprite).setMaterial(0, c);
+} else {
+c = cc.Material.getBuiltinMaterial("2d-gray-sprite");
+this.resultDlg.getChildByName("xx_" + a).getComponent(cc.Sprite).setMaterial(0, c);
+}
 };
 e.prototype.hideFinish = function() {
 this.resultDlg.active = !1;
@@ -1544,8 +1553,14 @@ this.levedata.active = !0;
 var i = parseInt(o);
 this.bgImg.spriteFrame = this.bgSprits[this.showLevel];
 this.clearlabel.string = i + "%";
-i >= 90 ? e = 5 : i >= 80 ? e = 4 : i >= 70 ? e = 3 : i >= 60 ? e = 2 : i >= 50 && (e = 1);
-for (t = 0; t < 5; ++t) this.bxingNodes[t].color = t < e ? cc.color(255, 255, 255, 255) : cc.color(155, 155, 155, 255);
+i >= 96 ? e = 5 : i >= 85 ? e = 4 : i >= 70 ? e = 3 : i >= 60 ? e = 2 : i >= 50 && (e = 1);
+for (t = 0; t < 5; ++t) if (t < e) {
+var a = cc.Material.getBuiltinMaterial("2d-sprite");
+this.bxingNodes[t].getComponent(cc.Sprite).setMaterial(0, a);
+} else {
+a = cc.Material.getBuiltinMaterial("2d-gray-sprite");
+this.bxingNodes[t].getComponent(cc.Sprite).setMaterial(0, a);
+}
 } else this.levedata.active = !1;
 };
 c([ s(cc.Label) ], e.prototype, "clearlabel", void 0);
